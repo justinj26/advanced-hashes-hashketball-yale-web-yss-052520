@@ -130,19 +130,17 @@ end
 
 def num_points_scored(player_name)
 game_hash.each do |(key, value)|
-  value[:players].each do |element|
-    if element[:player_name] == player_name
-      return element[:points]
-    end 
+  value[:players].find do |player|
+    return player[:player_name] == player_name
   end
 end 
 end
 
 def shoe_size(player_name)
 game_hash.each do |(key, value)|
-  value[:players].each do |element|
-    if element[:player_name] == player_name
-      return element[:shoe]
+  value[:players].each do |player|
+    if player[:player_name] == player_name
+      return player[:shoe]
     end 
   end
 end 
@@ -203,3 +201,41 @@ def big_shoe_rebounds
     end
   end
 end
+
+def winning_team
+  home_team_points = 0 
+  away_team_points = 0 
+  home_team_points = game_hash[:home].reduce(0) do |total, element|
+    total = total + element[:players][:points] 
+  end
+  away_team_points = game_hash[:away].reduce do |total, element|
+    total = total + element[:players][:points] 
+  end
+  if home_team_points > away_team_points
+    return "Brooklyn Nets"
+  else
+    "Charlotte Hornets"
+  end
+end
+
+#winning_team
+
+def player_with_longest_name
+  name_lengths = []
+  max_name_length = 0 
+  game_hash.each do |(key, value)|
+    value[:players].each do |element|
+      name_lengths << element[:player_name].length 
+    end
+  end
+  max_name_length = name_lengths.max 
+  game_hash.each do |(key, value)|
+   value[:players].each do |element|
+      if element[:player_name].length == max_name_length
+        return element[:player_name]
+      end
+    end
+  end
+end
+
+player_with_longest_name
